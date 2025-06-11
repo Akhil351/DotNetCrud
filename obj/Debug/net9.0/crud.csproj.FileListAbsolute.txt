@@ -124,3 +124,4 @@
 /Users/akhileswarv/Desktop/crud/obj/Debug/net9.0/crud.pdb
 /Users/akhileswarv/Desktop/crud/obj/Debug/net9.0/crud.genruntimeconfig.cache
 /Users/akhileswarv/Desktop/crud/obj/Debug/net9.0/ref/crud.dll
+/Users/akhileswarv/Desktop/crud/obj/Debug/net9.0/crud.sourcelink.json

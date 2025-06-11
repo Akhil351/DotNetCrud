@@ -1,4 +1,5 @@
 using crud.Data;
+using Crud.Exceptions;
 using crud.Model;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,7 +15,13 @@ public class StudentService(Db context) : IStudentService
 
     public async Task<Student> GetById(long id)
     {
-       return await _context.Students.FindAsync(id);
+        var student=await _context.Students.FindAsync(id);
+        if (student == null)
+        {
+            throw new NotFoundException("student details not found");
+        }
+
+        return student;
     }
 
 
@@ -31,7 +38,7 @@ public class StudentService(Db context) : IStudentService
         var existingStudent= await _context.Students.FindAsync(id);
         if (existingStudent == null)
         {
-            return "student not found";
+            throw new NotFoundException("student details not found");
         }
         existingStudent.Name=student.Name;
         _context.Students.Update(existingStudent);
@@ -44,7 +51,7 @@ public class StudentService(Db context) : IStudentService
         var existingStudent= await _context.Students.FindAsync(id);
         if (existingStudent == null)
         {
-            return "student not found";
+            throw new NotFoundException("student details not found");
         }
         _context.Students.Remove(existingStudent);
         await _context.SaveChangesAsync();

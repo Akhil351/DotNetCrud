@@ -1,3 +1,4 @@
+using Crud.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using crud.Model;
 using crud.Response;
@@ -15,80 +16,164 @@ public class StudentController(IStudentService toDoService) : ControllerBase
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        var list = await _toDoService.GetAll();
-
-        var response = new ApiResponse()
+        try
         {
-            Data = list,
-            Status = "Success",
-            Error = null,
-            TimeStamp = DateTime.Now 
-        };
+            var list = await _toDoService.GetAll();
 
-        return Ok(response);
+            var response = new ApiResponse()
+            {
+                Data = list,
+                Status = "Success",
+                TimeStamp = DateTime.Now
+            };
+
+            return Ok(response);
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse
+            {
+                Status = "Success",
+                TimeStamp = DateTime.Now,
+                Error = "An internal error occured",
+            };
+            return NotFound(response);
+        }
     }
 
 
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(int id)
     {
-        var item = await _toDoService.GetById(id);
-        var response = new ApiResponse
+        try
         {
-            Status = "Success",
-            TimeStamp = DateTime.Now 
-        };
-        if (item == null)
+            var item = await _toDoService.GetById(id);
+            var response = new ApiResponse
+            {
+                Status = "Success",
+                TimeStamp = DateTime.Now,
+                Data = item,
+            };
+            return Ok(response);
+        }
+        catch (NotFoundException e)
         {
-            response.Data = null;
-            response.Error="Student not found";
+            var response = new ApiResponse
+            {
+                Status = "Success",
+                TimeStamp = DateTime.Now,
+                Error = e.Message,
+            };
             return NotFound(response);
         }
-        response.Data = item;
-        response.Error=null;
-        return Ok(response);
+        catch (Exception e)
+        {
+            var response = new ApiResponse
+            {
+                Status = "Success",
+                TimeStamp = DateTime.Now,
+                Error = "An internal error occured",
+            };
+            return NotFound(response);
+        }
     }
     
     [HttpPost]
     public async Task<IActionResult> Create(Student student)
     {
-        var created = await _toDoService.Add(student);
-        var response = new ApiResponse()
+        try
         {
-            Data = created,
-            Status = "Success",
-            Error = null,
-            TimeStamp = DateTime.Now 
-        };
-        return Ok(response);
+            var created = await _toDoService.Add(student);
+            var response = new ApiResponse()
+            {
+                Data = created,
+                Status = "Success",
+                TimeStamp = DateTime.Now 
+            };
+            return Ok(response);
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse
+            {
+                Status = "Success",
+                TimeStamp = DateTime.Now,
+                Error = "An internal error occured",
+            };
+            return NotFound(response);
+        }
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, Student student)
     {
-        var existingStudent=await _toDoService.Update(id,student);
-        var response = new ApiResponse()
+        try
         {
-            Data = existingStudent,
-            Status = "Success",
-            Error = null,
-            TimeStamp = DateTime.Now 
-        };
-        return Ok(response);
+            var existingStudent = await _toDoService.Update(id, student);
+            var response = new ApiResponse()
+            {
+                Data = existingStudent,
+                Status = "Success",
+                TimeStamp = DateTime.Now
+            };
+            return Ok(response);
+        }
+        catch (NotFoundException e)
+        {
+            var response = new ApiResponse
+            {
+                Status = "Success",
+                TimeStamp = DateTime.Now,
+                Error = e.Message,
+            };
+            return NotFound(response);
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse
+            {
+                Status = "Success",
+                TimeStamp = DateTime.Now,
+                Error = "An internal error occured",
+            };
+            return NotFound(response);
+        }
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var deleteStudent=await _toDoService.Delete(id);
-        var response = new ApiResponse()
+        try
         {
-            Data = deleteStudent,
-            Status = "Success",
-            Error = null,
-            TimeStamp = DateTime.Now 
-        };
-        return Ok(response);
+            var deleteStudent=await _toDoService.Delete(id);
+            var response = new ApiResponse()
+            {
+                Data = deleteStudent,
+                Status = "Success",
+                TimeStamp = DateTime.Now 
+            };
+            return Ok(response);
+        }
+        catch (NotFoundException e)
+        {
+            var response = new ApiResponse
+            {
+                Status = "Success",
+                TimeStamp = DateTime.Now,
+                Error = e.Message,
+            };
+            return NotFound(response);
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse
+            {
+                Status = "Success",
+                TimeStamp = DateTime.Now,
+                Error = "An internal error occured",
+            };
+            return NotFound(response);
+        }
     }
     
 }
